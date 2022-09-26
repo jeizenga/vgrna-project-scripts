@@ -46,9 +46,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    cout << "read_name\tedit_dist\n";
+    cout << "read_name\tedit_dist\tscore\n";
     vg::io::for_each(gam, [&](vg::Alignment& aln) {
-        cout << aln.name() << '\t' << alignment_edit_dist(aln) << '\n';
+        cout << aln.name() << '\t' << alignment_edit_dist(aln) << '\t' << aln.score() << '\n';
     });
     cout << std::flush;
 

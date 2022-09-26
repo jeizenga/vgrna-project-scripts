@@ -22,10 +22,11 @@ ExternalProject_Add(seqlib-proj
 )
 
 ExternalProject_Add(libvgio-proj
-  SOURCE_DIR "${PROJECT_SOURCE_DIR}/deps/libvgio"
+  GIT_REPOSITORY "https://github.com/vgteam/libvgio.git"
+  GIT_TAG "55e6e6e520e39cc89af19a6505de7379e949a845"
   BUILD_IN_SOURCE TRUE
   UPDATE_COMMAND ""
-  CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps/libvgio -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=TRUE -DCMAKE_PREFIX_PATH=${PROJECT_SOURCE_DIR}/deps/htslib .
+  CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/external/libvgio -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=TRUE .
   BUILD_COMMAND $(MAKE)
   INSTALL_COMMAND ""
 )
@@ -58,7 +59,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 add_executable(calc_gam_edit_distance src/calc_gam_edit_distance.cpp)
 add_dependencies(calc_gam_edit_distance libvgio-proj)
-target_link_libraries(calc_allele_read_coverage hts vgio)
+target_link_libraries(calc_gam_edit_distance hts vgio)
 
 add_executable(calc_allele_read_coverage src/calc_allele_read_coverage.cpp)
 add_dependencies(calc_allele_read_coverage seqlib-proj)
