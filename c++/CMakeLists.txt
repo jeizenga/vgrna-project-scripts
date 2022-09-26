@@ -21,15 +21,27 @@ ExternalProject_Add(seqlib-proj
   INSTALL_COMMAND ""
 )
 
+ExternalProject_Add(libvgio-proj
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/deps/libvgio"
+  BUILD_IN_SOURCE TRUE
+  UPDATE_COMMAND ""
+  CONFIGURE_COMMAND cmake -DCMAKE_INSTALL_PREFIX=${PROJECT_SOURCE_DIR}/deps/libvgio -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=TRUE -DCMAKE_PREFIX_PATH=${PROJECT_SOURCE_DIR}/deps/htslib .
+  BUILD_COMMAND $(MAKE)
+  INSTALL_COMMAND ""
+)
+
 include_directories(
   ${PROJECT_SOURCE_DIR}/external/seqlib
   ${PROJECT_SOURCE_DIR}/external/seqlib/htslib
+  ${PROJECT_SOURCE_DIR}/external/libgvio/
+  ${PROJECT_SOURCE_DIR}/external/libgvio/include/
 )
 
 link_directories(
   ${PROJECT_SOURCE_DIR}/external/seqlib/src
   ${PROJECT_SOURCE_DIR}/external/seqlib/htslib
   ${PROJECT_SOURCE_DIR}/external/seqlib/bwa
+  ${PROJECT_SOURCE_DIR}/external/libvgio
 )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -43,6 +55,10 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+add_executable(calc_gam_edit_distance src/calc_gam_edit_distance.cpp)
+add_dependencies(calc_gam_edit_distance libvgio-proj)
+target_link_libraries(calc_allele_read_coverage hts vgio)
 
 add_executable(calc_allele_read_coverage src/calc_allele_read_coverage.cpp)
 add_dependencies(calc_allele_read_coverage seqlib-proj)
